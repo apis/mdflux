@@ -1,0 +1,15 @@
+{{define "html5-header"}}<!DOCTYPE html>
+<html lang="en"{{if eq .Theme "light"}} class="theme-light"{{else if eq .Theme "dark"}} class="theme-dark"{{end}}>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{.Title}}</title>
+<style>
+{{.Styles}}</style>
+</head>
+<body>
+{{end}}
+
+{{define "html5-footer"}}</body>
+</html>
+{{end}}

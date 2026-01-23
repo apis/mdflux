@@ -138,6 +138,33 @@ theme_id = 0
 | `xhtml` | `false` | Output XHTML 1.0 Strict instead of HTML5. Produces self-closing tags (`<br />`) and XML declaration. |
 | `east_asian_line_breaks` | `simple` | Line break handling for CJK text. `simple` removes breaks between wide characters. `css3draft` follows CSS Text Level 3 rules. |
 
+### Extension Options
+
+All extensions are enabled by default. Set to `false` to disable.
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `table` | `true` | GFM table syntax with headers, alignment, and cell formatting. |
+| `strikethrough` | `true` | Strike-through text using `~~deleted~~` syntax. |
+| `linkify` | `true` | Auto-detect and convert URLs and email addresses to clickable links. |
+| `task_list` | `true` | GitHub-style task lists with `- [x]` and `- [ ]` checkbox syntax. |
+| `definition_list` | `true` | Definition lists using term/definition pairs (PHP Markdown Extra syntax). |
+| `footnote` | `true` | Footnote references `[^1]` with auto-generated footnotes section. |
+| `typographer` | `true` | Smart typography: straight quotes → curly quotes, `--` → en-dash, `---` → em-dash, `...` → ellipsis. |
+| `cjk` | `true` | Optimized rendering for Chinese, Japanese, and Korean text. |
+| `katex` | `true` | LaTeX math rendering. Inline: `$E=mc^2$`. Display: `$$\int_0^\infty$$`. |
+| `mermaid` | `true` | Mermaid diagrams in fenced code blocks with `mermaid` language identifier. |
+
+### D2 Diagram Options
+
+D2 is a declarative diagramming language. Configure under `[extensions.d2]`:
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `enabled` | `true` | Enable D2 diagram rendering in fenced code blocks with `d2` language identifier. |
+| `layout` | `dagre` | Layout engine. `dagre` for directed graphs, `elk` for more complex layouts. |
+| `theme_id` | `0` | D2 theme ID. `0` is default, other values apply different color schemes. |
+
 ---
 
 ## PDF Options

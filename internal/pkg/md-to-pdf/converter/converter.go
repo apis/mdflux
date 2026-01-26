@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"io"
 
+	"md-to-pdf/internal/pkg/md-to-pdf/mermaid"
+
 	d2 "github.com/FurqanSoftware/goldmark-d2"
 	"github.com/FurqanSoftware/goldmark-katex"
 	"github.com/yuin/goldmark"
@@ -11,7 +13,6 @@ import (
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
-	"md-to-pdf/internal/pkg/md-to-pdf/mermaid"
 	"oss.terrastruct.com/d2/d2graph"
 	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
 	"oss.terrastruct.com/d2/d2layouts/d2elklayout"

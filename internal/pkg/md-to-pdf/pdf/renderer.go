@@ -21,6 +21,7 @@ type Options struct {
 	ChromePath   string
 }
 
+// DefaultOptions returns Options with sensible defaults for PDF rendering.
 func DefaultOptions() Options {
 	return Options{
 		PageSize:     "A4",

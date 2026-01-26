@@ -73,7 +73,11 @@ func run(cfg *config.Config, templates *converter.Templates) error {
 		if err != nil {
 			return fmt.Errorf("failed to open input file: %w", err)
 		}
-		defer f.Close()
+		defer func() {
+			if err := f.Close(); err != nil {
+				log.Warn().Err(err).Msg("Failed to close input file")
+			}
+		}()
 		input = f
 		log.Debug().Str("file", cfg.Input.File).Msg("Reading from file")
 	}
@@ -128,7 +132,11 @@ func runHTMLConversion(cfg *config.Config, conv *converter.Converter, input io.R
 		if err != nil {
 			return fmt.Errorf("failed to create output file: %w", err)
 		}
-		defer f.Close()
+		defer func() {
+			if err := f.Close(); err != nil {
+				log.Warn().Err(err).Msg("Failed to close output file")
+			}
+		}()
 		output = f
 		log.Debug().Str("file", cfg.Output.File).Msg("Writing to file")
 	}
@@ -151,15 +159,23 @@ func runPDFConversion(cfg *config.Config, conv *converter.Converter, input io.Re
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}
 	tempHTMLPath := tmpFile.Name()
-	defer os.Remove(tempHTMLPath)
+	defer func() {
+		if err := os.Remove(tempHTMLPath); err != nil {
+			log.Warn().Err(err).Msg("Failed to remove temporary file")
+		}
+	}()
 
 	log.Debug().Str("temp_file", tempHTMLPath).Msg("Created temporary HTML file")
 
 	if err := conv.ConvertReader(input, tmpFile); err != nil {
-		tmpFile.Close()
+		if closeErr := tmpFile.Close(); closeErr != nil {
+			log.Warn().Err(closeErr).Msg("Failed to close temporary file")
+		}
 		return fmt.Errorf("conversion error: %w", err)
 	}
-	tmpFile.Close()
+	if err := tmpFile.Close(); err != nil {
+		log.Warn().Err(err).Msg("Failed to close temporary file")
+	}
 
 	absHTMLPath, err := filepath.Abs(tempHTMLPath)
 	if err != nil {

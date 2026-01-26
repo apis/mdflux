@@ -43,6 +43,18 @@ margin_bottom = 0.5
 margin_left = 0.5
 margin_right = 0.5
 
+[pdf.chrome]
+# Chrome detection mode: "auto" or "manual"
+# - auto: automatically detect Chrome/Chromium in standard system locations
+# - manual: use the path specified below
+mode = "auto"
+# Path to Chrome/Chromium executable (only used when mode = "manual")
+# Examples:
+#   Linux: "/usr/bin/google-chrome" or "/usr/bin/chromium-browser"
+#   macOS: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+#   Windows: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+path = ""
+
 [extensions]
 # GFM tables
 table = true

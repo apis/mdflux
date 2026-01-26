@@ -32,3 +32,6 @@ Thumbs.db
 
 # Config files (keep templates)
 md-to-pdf.cfg.toml
+
+# Downloaded assets (fetched via just fetch-mermaid)
+web/assets/

@@ -1,12 +1,16 @@
 package mermaid
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
 	"os"
 	"path/filepath"
 	"sync"
+	"text/template"
+
+	"md-to-pdf/web"
 
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
@@ -46,16 +50,22 @@ func (r *Renderer) init() error {
 	}
 	r.tempDir = tempDir
 
-	// Write the mermaid HTML template to temp file
-	htmlContent := fmt.Sprintf(`<!DOCTYPE html>
-<html>
-<head>
-<script>%s</script>
-</head>
-<body>
-<div id="container"></div>
-</body>
-</html>`, mermaidJS)
+	htmlTmplContent, err := web.TemplateFS.ReadFile("templates/mermaid.html")
+	if err != nil {
+		os.RemoveAll(tempDir)
+		return fmt.Errorf("failed to read mermaid HTML template: %w", err)
+	}
+	htmlTmpl, err := template.New("mermaid").Parse(string(htmlTmplContent))
+	if err != nil {
+		os.RemoveAll(tempDir)
+		return fmt.Errorf("failed to parse mermaid HTML template: %w", err)
+	}
+	var htmlBuf bytes.Buffer
+	if err := htmlTmpl.Execute(&htmlBuf, map[string]string{"MermaidJS": web.MermaidJS}); err != nil {
+		os.RemoveAll(tempDir)
+		return fmt.Errorf("failed to execute mermaid HTML template: %w", err)
+	}
+	htmlContent := htmlBuf.String()
 
 	r.htmlPath = filepath.Join(tempDir, "mermaid.html")
 	if err := os.WriteFile(r.htmlPath, []byte(htmlContent), 0644); err != nil {
@@ -115,29 +125,19 @@ func (r *Renderer) Render(code string) ([]byte, error) {
 		return nil, fmt.Errorf("failed to marshal mermaid code: %w", err)
 	}
 
-	// JavaScript to render the diagram
-	// mermaid.js is already loaded in the page
-	renderScript := fmt.Sprintf(`
-(async () => {
-	try {
-		if (typeof mermaid === 'undefined') {
-			return { svg: null, error: 'mermaid is not defined' };
-		}
-
-		mermaid.initialize({
-			startOnLoad: false,
-			securityLevel: 'loose',
-			theme: 'default'
-		});
-
-		const id = 'mermaid-' + Math.random().toString(36).substr(2, 9);
-		const result = await mermaid.render(id, %s);
-		return { svg: result.svg || null, error: null };
-	} catch (e) {
-		return { svg: null, error: e.message || String(e) };
+	jsTmplContent, err := web.TemplateFS.ReadFile("templates/mermaid-render.js")
+	if err != nil {
+		return nil, fmt.Errorf("failed to read mermaid render JS template: %w", err)
 	}
-})()
-`, codeJSON)
+	jsTmpl, err := template.New("render").Parse(string(jsTmplContent))
+	if err != nil {
+		return nil, fmt.Errorf("failed to parse mermaid render JS template: %w", err)
+	}
+	var jsBuf bytes.Buffer
+	if err := jsTmpl.Execute(&jsBuf, map[string]string{"Code": string(codeJSON)}); err != nil {
+		return nil, fmt.Errorf("failed to execute mermaid render JS template: %w", err)
+	}
+	renderScript := jsBuf.String()
 
 	var result map[string]interface{}
 

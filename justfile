@@ -105,7 +105,7 @@ install:
 # Mermaid.js version to download
 mermaid_version := "11.4.0"
 mermaid_url := "https://cdn.jsdelivr.net/npm/mermaid@" + mermaid_version + "/dist/mermaid.min.js"
-mermaid_dest := "internal/pkg/md-to-pdf/mermaid/assets/mermaid.min.js"
+mermaid_dest := "web/assets/mermaid.min.js"
 
 # Fetch mermaid.min.js from CDN
 [unix]

@@ -14,6 +14,7 @@ import (
 
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"
+	"github.com/rs/zerolog/log"
 )
 
 // Renderer implements the mermaid.ServerRenderer interface using chromedp.
@@ -52,24 +53,32 @@ func (r *Renderer) init() error {
 
 	htmlTmplContent, err := web.TemplateFS.ReadFile("templates/mermaid.html")
 	if err != nil {
-		os.RemoveAll(tempDir)
+		if removeErr := os.RemoveAll(tempDir); removeErr != nil {
+			log.Error().Err(removeErr).Str("path", tempDir).Msg("failed to remove temp directory")
+		}
 		return fmt.Errorf("failed to read mermaid HTML template: %w", err)
 	}
 	htmlTmpl, err := template.New("mermaid").Parse(string(htmlTmplContent))
 	if err != nil {
-		os.RemoveAll(tempDir)
+		if removeErr := os.RemoveAll(tempDir); removeErr != nil {
+			log.Error().Err(removeErr).Str("path", tempDir).Msg("failed to remove temp directory")
+		}
 		return fmt.Errorf("failed to parse mermaid HTML template: %w", err)
 	}
 	var htmlBuf bytes.Buffer
 	if err := htmlTmpl.Execute(&htmlBuf, map[string]string{"MermaidJS": web.MermaidJS}); err != nil {
-		os.RemoveAll(tempDir)
+		if removeErr := os.RemoveAll(tempDir); removeErr != nil {
+			log.Error().Err(removeErr).Str("path", tempDir).Msg("failed to remove temp directory")
+		}
 		return fmt.Errorf("failed to execute mermaid HTML template: %w", err)
 	}
 	htmlContent := htmlBuf.String()
 
 	r.htmlPath = filepath.Join(tempDir, "mermaid.html")
 	if err := os.WriteFile(r.htmlPath, []byte(htmlContent), 0644); err != nil {
-		os.RemoveAll(tempDir)
+		if removeErr := os.RemoveAll(tempDir); removeErr != nil {
+			log.Error().Err(removeErr).Str("path", tempDir).Msg("failed to remove temp directory")
+		}
 		return fmt.Errorf("failed to write mermaid HTML: %w", err)
 	}
 
@@ -97,7 +106,9 @@ func (r *Renderer) init() error {
 	if err := chromedp.Run(ctx, chromedp.Navigate(fileURL), chromedp.WaitReady("body")); err != nil {
 		allocCancel()
 		cancel()
-		os.RemoveAll(tempDir)
+		if removeErr := os.RemoveAll(tempDir); removeErr != nil {
+			log.Error().Err(removeErr).Str("path", tempDir).Msg("failed to remove temp directory")
+		}
 		return fmt.Errorf("failed to initialize browser: %w", err)
 	}
 
@@ -184,7 +195,9 @@ func (r *Renderer) Close() {
 		r.allocCancel()
 	}
 	if r.tempDir != "" {
-		os.RemoveAll(r.tempDir)
+		if err := os.RemoveAll(r.tempDir); err != nil {
+			log.Error().Err(err).Str("path", r.tempDir).Msg("failed to remove temp directory")
+		}
 	}
 	r.initialized = false
 }

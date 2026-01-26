@@ -70,7 +70,7 @@ func (t *transformer) Transform(node *ast.Document, reader text.Reader, pc parse
 		return ast.WalkContinue, nil
 	})
 	if err != nil {
-		log.Fatal().Err(err).Msg("ast.Walk() failed. Something seriously wrong...")
+		log.Error().Err(err).Msg("failed to walk AST for mermaid blocks")
 		return
 	}
 

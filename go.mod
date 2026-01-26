@@ -7,11 +7,12 @@ toolchain go1.25.6
 require (
 	github.com/FurqanSoftware/goldmark-d2 v0.0.0-20250906161746-6305edf4a24a
 	github.com/FurqanSoftware/goldmark-katex v0.0.0-20250906161933-da324498b7cf
+	github.com/chromedp/cdproto v0.0.0-20250803210736-d308e07a266d
+	github.com/chromedp/chromedp v0.14.2
 	github.com/rs/zerolog v1.34.0
 	github.com/spf13/pflag v1.0.10
 	github.com/spf13/viper v1.21.0
 	github.com/yuin/goldmark v1.7.16
-	go.abhg.dev/goldmark/mermaid v0.6.0
 	oss.terrastruct.com/d2 v0.7.1
 )
 
@@ -21,8 +22,6 @@ require (
 	github.com/andybalholm/brotli v1.2.0 // indirect
 	github.com/andybalholm/cascadia v1.3.3 // indirect
 	github.com/bluele/gcache v0.0.2 // indirect
-	github.com/chromedp/cdproto v0.0.0-20250803210736-d308e07a266d // indirect
-	github.com/chromedp/chromedp v0.14.2 // indirect
 	github.com/chromedp/sysutil v1.1.0 // indirect
 	github.com/dlclark/regexp2 v1.11.5 // indirect
 	github.com/dop251/goja v0.0.0-20250630131328-58d95d85e994 // indirect

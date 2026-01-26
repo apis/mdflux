@@ -13,6 +13,7 @@ import (
 
 	"md-to-pdf/internal/pkg/md-to-pdf/config"
 	"md-to-pdf/internal/pkg/md-to-pdf/converter"
+	"md-to-pdf/internal/pkg/md-to-pdf/mermaid"
 	"md-to-pdf/internal/pkg/md-to-pdf/pdf"
 	"md-to-pdf/web"
 )
@@ -82,12 +83,25 @@ func run(cfg *config.Config, templates *converter.Templates) error {
 		log.Debug().Str("file", cfg.Input.File).Msg("Reading from file")
 	}
 
+	// Create mermaid renderer if mermaid extension is enabled
+	var mermaidRenderer *mermaid.Renderer
+	if cfg.Extensions.Mermaid {
+		chromePath := ""
+		if cfg.PDF.Chrome.Mode == "manual" {
+			chromePath = cfg.PDF.Chrome.Path
+		}
+		mermaidRenderer = mermaid.NewRenderer(chromePath)
+		defer mermaidRenderer.Close()
+		log.Debug().Str("chrome_path", chromePath).Msg("Mermaid server-side rendering enabled")
+	}
+
 	conv := converter.New(converter.Options{
 		Unsafe:              cfg.HTML.Unsafe,
 		HardWraps:           cfg.HTML.HardWraps,
 		XHTML:               cfg.HTML.XHTML,
 		Theme:               cfg.HTML.Theme,
 		EastAsianLineBreaks: cfg.HTML.EastAsianLineBreaks,
+		MermaidRenderer:     mermaidRenderer,
 		Extensions: converter.ExtensionOptions{
 			Table:          cfg.Extensions.Table,
 			Strikethrough:  cfg.Extensions.Strikethrough,

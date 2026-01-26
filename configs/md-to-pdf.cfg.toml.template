@@ -48,11 +48,27 @@ margin_right = 0.5
 # - auto: automatically detect Chrome/Chromium in standard system locations
 # - manual: use the path specified below
 mode = "auto"
+
 # Path to Chrome/Chromium executable (only used when mode = "manual")
-# Examples:
-#   Linux: "/usr/bin/google-chrome" or "/usr/bin/chromium-browser"
-#   macOS: "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-#   Windows: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+# Common paths by operating system:
+#
+# Linux:
+#   path = "/usr/bin/google-chrome"
+#   path = "/usr/bin/google-chrome-stable"
+#   path = "/usr/bin/chromium"
+#   path = "/usr/bin/chromium-browser"
+#   path = "/snap/bin/chromium"
+#
+# macOS:
+#   path = "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
+#   path = "/Applications/Chromium.app/Contents/MacOS/Chromium"
+#   path = "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge"
+#
+# Windows:
+#   path = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe"
+#   path = "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe"
+#   path = "C:\\Program Files (x86)\\Microsoft\\Edge\\Application\\msedge.exe"
+#
 path = ""
 
 [extensions]
@@ -80,6 +96,12 @@ typographer = true
 # Chinese/Japanese/Korean text optimizations
 cjk = false
 
+# KaTeX math rendering
+katex = true
+
+# Mermaid diagram support
+mermaid = true
+
 [extensions.d2]
 # D2 diagram support (https://d2lang.com)
 enabled = true
@@ -87,9 +109,3 @@ enabled = true
 layout = "dagre"
 # Theme ID (0 = default, see D2 documentation for theme IDs)
 theme_id = 0
-
-# KaTeX math rendering
-katex = true
-
-# Mermaid diagram support
-mermaid = true

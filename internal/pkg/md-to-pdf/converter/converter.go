@@ -11,7 +11,7 @@ import (
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
-	"go.abhg.dev/goldmark/mermaid"
+	"md-to-pdf/internal/pkg/md-to-pdf/mermaid"
 	"oss.terrastruct.com/d2/d2graph"
 	"oss.terrastruct.com/d2/d2layouts/d2dagrelayout"
 	"oss.terrastruct.com/d2/d2layouts/d2elklayout"
@@ -24,6 +24,7 @@ type Options struct {
 	Theme               string
 	EastAsianLineBreaks string
 	Extensions          ExtensionOptions
+	MermaidRenderer     *mermaid.Renderer
 }
 
 type ExtensionOptions struct {
@@ -131,7 +132,7 @@ func New(opts Options, templates *Templates) *Converter {
 
 	if opts.Extensions.Mermaid {
 		gmOpts = append(gmOpts, goldmark.WithExtensions(&mermaid.Extender{
-			RenderMode: mermaid.RenderModeClient,
+			Renderer: opts.MermaidRenderer,
 		}))
 	}
 

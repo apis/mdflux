@@ -101,3 +101,23 @@ install:
     @echo "Installing md-to-pdf..."
     @go install ./cmd/md-to-pdf
     @echo "Installed to GOPATH/bin"
+
+# Mermaid.js version to download
+mermaid_version := "11.4.0"
+mermaid_url := "https://cdn.jsdelivr.net/npm/mermaid@" + mermaid_version + "/dist/mermaid.min.js"
+mermaid_dest := "internal/pkg/md-to-pdf/mermaid/assets/mermaid.min.js"
+
+# Fetch mermaid.min.js from CDN
+[unix]
+fetch-mermaid:
+    @echo "Fetching mermaid.js v{{mermaid_version}}..."
+    @mkdir -p $(dirname {{mermaid_dest}})
+    @curl -sL {{mermaid_url}} -o {{mermaid_dest}}
+    @echo "Downloaded to {{mermaid_dest}} ($(wc -c < {{mermaid_dest}} | tr -d ' ') bytes)"
+
+[windows]
+fetch-mermaid:
+    @echo "Fetching mermaid.js v{{mermaid_version}}..."
+    @New-Item -ItemType Directory -Force -Path (Split-Path {{mermaid_dest}}) | Out-Null
+    @Invoke-WebRequest -Uri {{mermaid_url}} -OutFile {{mermaid_dest}}
+    @echo "Downloaded to {{mermaid_dest}}"

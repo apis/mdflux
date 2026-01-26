@@ -17,6 +17,8 @@ type Options struct {
 	MarginBottom float64
 	MarginLeft   float64
 	MarginRight  float64
+	ChromeMode   string
+	ChromePath   string
 }
 
 func DefaultOptions() Options {
@@ -28,6 +30,8 @@ func DefaultOptions() Options {
 		MarginBottom: 0.5,
 		MarginLeft:   0.5,
 		MarginRight:  0.5,
+		ChromeMode:   "auto",
+		ChromePath:   "",
 	}
 }
 
@@ -42,6 +46,10 @@ func RenderHTMLToPDF(htmlFilePath, pdfFilePath string, opts Options) error {
 		chromedp.Flag("no-zygote", true),
 		chromedp.Flag("disable-extensions", true),
 	)
+
+	if opts.ChromeMode == "manual" && opts.ChromePath != "" {
+		allocOpts = append(allocOpts, chromedp.ExecPath(opts.ChromePath))
+	}
 
 	allocCtx, allocCancel := chromedp.NewExecAllocator(context.Background(), allocOpts...)
 	defer allocCancel()

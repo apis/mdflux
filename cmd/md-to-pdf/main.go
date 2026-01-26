@@ -179,6 +179,8 @@ func runPDFConversion(cfg *config.Config, conv *converter.Converter, input io.Re
 		MarginBottom: cfg.PDF.MarginBottom,
 		MarginLeft:   cfg.PDF.MarginLeft,
 		MarginRight:  cfg.PDF.MarginRight,
+		ChromeMode:   cfg.PDF.Chrome.Mode,
+		ChromePath:   cfg.PDF.Chrome.Path,
 	}
 
 	log.Debug().Str("html_path", absHTMLPath).Str("pdf_path", absPDFPath).Msg("Rendering PDF")

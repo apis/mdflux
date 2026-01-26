@@ -22,14 +22,15 @@ const (
 	logFileKey  = "log_file"
 	themeKey    = "html.theme"
 
-	defaultLogLevel    = "info"
-	defaultTheme       = "auto"
-	defaultFormat      = "html"
-	defaultD2Layout    = "dagre"
-	defaultD2ThemeID   = int64(0)
-	defaultPDFPageSize = "A4"
-	defaultPDFScale    = 0.8
-	defaultPDFMargin   = 0.5
+	defaultLogLevel      = "info"
+	defaultTheme         = "auto"
+	defaultFormat        = "html"
+	defaultD2Layout      = "dagre"
+	defaultD2ThemeID     = int64(0)
+	defaultPDFPageSize   = "A4"
+	defaultPDFScale      = 0.8
+	defaultPDFMargin     = 0.5
+	defaultPDFChromeMode = "auto"
 )
 
 type Config struct {
@@ -52,13 +53,19 @@ type OutputConfig struct {
 }
 
 type PDFConfig struct {
-	PageSize     string  `mapstructure:"page_size"`
-	Landscape    bool    `mapstructure:"landscape"`
-	Scale        float64 `mapstructure:"scale"`
-	MarginTop    float64 `mapstructure:"margin_top"`
-	MarginBottom float64 `mapstructure:"margin_bottom"`
-	MarginLeft   float64 `mapstructure:"margin_left"`
-	MarginRight  float64 `mapstructure:"margin_right"`
+	PageSize     string       `mapstructure:"page_size"`
+	Landscape    bool         `mapstructure:"landscape"`
+	Scale        float64      `mapstructure:"scale"`
+	MarginTop    float64      `mapstructure:"margin_top"`
+	MarginBottom float64      `mapstructure:"margin_bottom"`
+	MarginLeft   float64      `mapstructure:"margin_left"`
+	MarginRight  float64      `mapstructure:"margin_right"`
+	Chrome       ChromeConfig `mapstructure:"chrome"`
+}
+
+type ChromeConfig struct {
+	Mode string `mapstructure:"mode"`
+	Path string `mapstructure:"path"`
 }
 
 type HTMLConfig struct {
@@ -101,6 +108,7 @@ func LoadAndParse() (*Config, error) {
 	viper.SetDefault("pdf.margin_bottom", defaultPDFMargin)
 	viper.SetDefault("pdf.margin_left", defaultPDFMargin)
 	viper.SetDefault("pdf.margin_right", defaultPDFMargin)
+	viper.SetDefault("pdf.chrome.mode", defaultPDFChromeMode)
 
 	flagSet := pflag.NewFlagSet("md-to-pdf", pflag.ContinueOnError)
 	flagSet.Usage = func() {}

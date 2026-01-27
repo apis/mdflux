@@ -4,6 +4,18 @@
 
 **mdflux** is a high-performance, minimalist CLI utility and Go library designed to convert Commonmark Markdown into production-ready HTML or PDF documents. Unlike heavy Node.js alternatives, this tool is compiled to a single binary with dependency on a webkit browser like Chrome or Edge for PDF generation.
 
+## Demo
+
+See mdflux in action with Mermaid diagrams, D2 architecture diagrams, and KaTeX mathematical expressions—all rendered server-side to embedded SVG with no client-side JavaScript required:
+
+| Format | Link |
+| --- | --- |
+| Markdown | [docs/demo.md](docs/demo.md) |
+| HTML | [docs/demo.html](docs/demo.html) |
+| PDF | [docs/demo.pdf](docs/demo.pdf) |
+
+---
+
 ## Features
 
 * **Performance:** Built with Go for near-instantaneous conversion of large documents

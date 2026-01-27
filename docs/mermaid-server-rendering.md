@@ -22,7 +22,7 @@ Replaced client-side rendering with a custom goldmark extension that renders mer
 ┌─────────────────────────────────────────────────────────────┐
 │                    Build/Setup Phase                        │
 │  1. Download mermaid.min.js from CDN (just fetch-mermaid)   │
-│  2. Place in internal/pkg/md-to-pdf/mermaid/assets/         │
+│  2. Place in internal/pkg/mdflux/mermaid/assets/            │
 │  3. Embed via //go:embed                                    │
 └─────────────────────────────────────────────────────────────┘
                               ↓
@@ -58,7 +58,7 @@ Replaced client-side rendering with a custom goldmark extension that renders mer
 ### Package Structure
 
 ```
-internal/pkg/md-to-pdf/mermaid/
+internal/pkg/mdflux/mermaid/
 ├── assets/
 │   └── mermaid.min.js      # Downloaded from CDN via `just fetch-mermaid`
 ├── embed.go                 # //go:embed for mermaid.min.js
@@ -95,8 +95,8 @@ just fetch-mermaid
 just build
 
 # Convert markdown with mermaid diagrams
-./bin/md-to-pdf -i document.md -o document.html
-./bin/md-to-pdf -i document.md -o document.pdf -f pdf
+./bin/mdflux -i document.md -o document.html
+./bin/mdflux -i document.md -o document.pdf -f pdf
 ```
 
 ### justfile Recipes
@@ -105,7 +105,7 @@ just build
 # Mermaid.js version to download
 mermaid_version := "11.4.0"
 mermaid_url := "https://cdn.jsdelivr.net/npm/mermaid@" + mermaid_version + "/dist/mermaid.min.js"
-mermaid_dest := "internal/pkg/md-to-pdf/mermaid/assets/mermaid.min.js"
+mermaid_dest := "internal/pkg/mdflux/mermaid/assets/mermaid.min.js"
 
 # Fetch mermaid.min.js from CDN
 [unix]

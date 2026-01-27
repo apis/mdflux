@@ -1,4 +1,4 @@
-module md-to-pdf
+module mdflux
 
 go 1.25
 

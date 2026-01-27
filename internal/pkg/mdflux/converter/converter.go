@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"md-to-pdf/internal/pkg/md-to-pdf/mermaid"
+	"mdflux/internal/pkg/mdflux/mermaid"
 
 	d2 "github.com/FurqanSoftware/goldmark-d2"
 	"github.com/FurqanSoftware/goldmark-katex"

@@ -11,7 +11,7 @@ import (
 )
 
 const (
-	envPrefix = "MD_TO_PDF"
+	envPrefix = "MDFLUX"
 
 	helpKey     = "help"
 	configKey   = "config"
@@ -110,7 +110,7 @@ func LoadAndParse() (*Config, error) {
 	viper.SetDefault("pdf.margin_right", defaultPDFMargin)
 	viper.SetDefault("pdf.chrome.mode", defaultPDFChromeMode)
 
-	flagSet := pflag.NewFlagSet("md-to-pdf", pflag.ContinueOnError)
+	flagSet := pflag.NewFlagSet("mdflux", pflag.ContinueOnError)
 	flagSet.Usage = func() {}
 
 	help := flagSet.BoolP(helpKey, "?", false, "Display help information")
@@ -131,10 +131,10 @@ func LoadAndParse() (*Config, error) {
 	}
 
 	if *help {
-		fmt.Println("md-to-pdf - Convert Markdown to HTML using goldmark")
+		fmt.Println("mdflux - Convert Markdown to HTML using goldmark")
 		fmt.Println()
 		fmt.Println("Usage:")
-		fmt.Println("  md-to-pdf [flags]")
+		fmt.Println("  mdflux [flags]")
 		fmt.Println()
 		fmt.Println("Flags:")
 		fmt.Println(flagSet.FlagUsages())
@@ -149,11 +149,11 @@ func LoadAndParse() (*Config, error) {
 	if configFile != "" {
 		viper.SetConfigFile(configFile)
 	} else {
-		viper.SetConfigName("md-to-pdf.cfg")
+		viper.SetConfigName("mdflux.cfg")
 		viper.SetConfigType("toml")
 		viper.AddConfigPath(".")
-		viper.AddConfigPath("$HOME/.config/md-to-pdf")
-		viper.AddConfigPath("/etc/md-to-pdf")
+		viper.AddConfigPath("$HOME/.config/mdflux")
+		viper.AddConfigPath("/etc/mdflux")
 	}
 
 	viper.SetEnvPrefix(envPrefix)

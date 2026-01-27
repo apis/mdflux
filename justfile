@@ -8,31 +8,31 @@ exe_suffix := if os() == "windows" { ".exe" } else { "" }
 default:
     @just --list
 
-# Build the md-to-pdf binary
+# Build the mdflux binary
 build:
-    @echo "Building md-to-pdf..."
-    @go build -o bin/md-to-pdf{{exe_suffix}} ./cmd/md-to-pdf
-    @echo "Build complete: bin/md-to-pdf{{exe_suffix}}"
+    @echo "Building mdflux..."
+    @go build -o bin/mdflux{{exe_suffix}} ./cmd/mdflux
+    @echo "Build complete: bin/mdflux{{exe_suffix}}"
 
 # Build and run with sample input
 run: build
-    @echo "Running md-to-pdf..."
-    @echo "# Sample\n\nThis is **bold** and *italic*." | ./bin/md-to-pdf{{exe_suffix}} -i -
+    @echo "Running mdflux..."
+    @echo "# Sample\n\nThis is **bold** and *italic*." | ./bin/mdflux{{exe_suffix}} -i -
 
 # Run with debug logging
 run-debug: build
-    @echo "Running md-to-pdf with debug logging..."
-    @echo "# Sample\n\nThis is **bold**." | ./bin/md-to-pdf{{exe_suffix}} -i - -l debug
+    @echo "Running mdflux with debug logging..."
+    @echo "# Sample\n\nThis is **bold**." | ./bin/mdflux{{exe_suffix}} -i - -l debug
 
 # Convert a file
 convert input output="": build
     @echo "Converting {{input}}..."
-    @./bin/md-to-pdf{{exe_suffix}} -i {{input}} {{ if output != "" { "-o " + output } else { "" } }}
+    @./bin/mdflux{{exe_suffix}} -i {{input}} {{ if output != "" { "-o " + output } else { "" } }}
 
 # Convert with full HTML document
 convert-full input output="": build
     @echo "Converting {{input}} to full HTML document..."
-    @./bin/md-to-pdf{{exe_suffix}} -i {{input}} --html.full_document {{ if output != "" { "-o " + output } else { "" } }}
+    @./bin/mdflux{{exe_suffix}} -i {{input}} --html.full_document {{ if output != "" { "-o " + output } else { "" } }}
 
 # Clean build artifacts
 [unix]
@@ -94,12 +94,12 @@ lint:
 
 # Show help
 help: build
-    @./bin/md-to-pdf{{exe_suffix}} -?
+    @./bin/mdflux{{exe_suffix}} -?
 
 # Install binary to GOPATH/bin
 install:
-    @echo "Installing md-to-pdf..."
-    @go install ./cmd/md-to-pdf
+    @echo "Installing mdflux..."
+    @go install ./cmd/mdflux
     @echo "Installed to GOPATH/bin"
 
 # Mermaid.js version to download

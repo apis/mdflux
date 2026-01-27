@@ -10,7 +10,7 @@ import (
 	"sync"
 	"text/template"
 
-	"md-to-pdf/web"
+	"mdflux/web"
 
 	"github.com/chromedp/cdproto/runtime"
 	"github.com/chromedp/chromedp"

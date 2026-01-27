@@ -11,11 +11,11 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/spf13/viper"
 
-	"md-to-pdf/internal/pkg/md-to-pdf/config"
-	"md-to-pdf/internal/pkg/md-to-pdf/converter"
-	"md-to-pdf/internal/pkg/md-to-pdf/mermaid"
-	"md-to-pdf/internal/pkg/md-to-pdf/pdf"
-	"md-to-pdf/web"
+	"mdflux/internal/pkg/mdflux/config"
+	"mdflux/internal/pkg/mdflux/converter"
+	"mdflux/internal/pkg/mdflux/mermaid"
+	"mdflux/internal/pkg/mdflux/pdf"
+	"mdflux/web"
 )
 
 func main() {
@@ -168,7 +168,7 @@ func runPDFConversion(cfg *config.Config, conv *converter.Converter, input io.Re
 		return fmt.Errorf("PDF output requires a file path, cannot write to stdout")
 	}
 
-	tmpFile, err := os.CreateTemp("", "md-to-pdf-*.html")
+	tmpFile, err := os.CreateTemp("", "mdflux-*.html")
 	if err != nil {
 		return fmt.Errorf("failed to create temp file: %w", err)
 	}

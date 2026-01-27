@@ -1,6 +1,6 @@
-# md-to-pdf
+# mdflux
 
-**md-to-pdf** is a high-performance, minimalist CLI utility and Go library designed to convert Commonmark Markdown into production-ready HTML or PDF documents. Unlike heavy Node.js alternatives, this tool is compiled to a single binary with dependency on a webkit browser like Chrome or Edge for PDF generation.
+**mdflux** is a high-performance, minimalist CLI utility and Go library designed to convert Commonmark Markdown into production-ready HTML or PDF documents. Unlike heavy Node.js alternatives, this tool is compiled to a single binary with dependency on a webkit browser like Chrome or Edge for PDF generation.
 
 ## Features
 
@@ -34,10 +34,10 @@ All extensions are enabled by default and can be toggled via configuration:
 
 ### CLI Tool
 
-Download the pre-compiled binary from the [Releases](https://github.com/apis/md-to-pdf/releases) page or install via Go:
+Download the pre-compiled binary from the [Releases](https://github.com/apis/mdflux/releases) page or install via Go:
 
 ```bash
-go install github.com/apis/md-to-pdf@latest
+go install github.com/apis/mdflux@latest
 ```
 
 ---
@@ -49,19 +49,19 @@ go install github.com/apis/md-to-pdf@latest
 Convert a markdown file to PDF:
 
 ```bash
-md-to-pdf -i input.md -o output.pdf -f pdf
+mdflux -i input.md -o output.pdf -f pdf
 ```
 
 Convert to HTML with dark theme:
 
 ```bash
-md-to-pdf -i input.md -o output.html -t dark
+mdflux -i input.md -o output.html -t dark
 ```
 
 Read from stdin and output HTML to stdout:
 
 ```bash
-cat input.md | md-to-pdf
+cat input.md | mdflux
 ```
 
 ---
@@ -83,16 +83,16 @@ cat input.md | md-to-pdf
 
 ### Environment Variables
 
-All options can be set via environment variables with the `MD_TO_PDF_` prefix:
+All options can be set via environment variables with the `MDFLUX_` prefix:
 
 ```bash
-export MD_TO_PDF_THEME=dark
-export MD_TO_PDF_FORMAT=pdf
+export MDFLUX_THEME=dark
+export MDFLUX_FORMAT=pdf
 ```
 
 ### Config File
 
-Create a `md-to-pdf.cfg.toml` file:
+Create a `mdflux.cfg.toml` file:
 
 ```toml
 [html]

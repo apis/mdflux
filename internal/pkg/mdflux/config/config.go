@@ -131,7 +131,7 @@ func LoadAndParse() (*Config, error) {
 	}
 
 	if *help {
-		fmt.Println("mdflux - Convert Markdown to HTML using goldmark")
+		fmt.Println("mdflux - Transform your Markdown into high-fidelity HTML and PDF with zero friction.")
 		fmt.Println()
 		fmt.Println("Usage:")
 		fmt.Println("  mdflux [flags]")

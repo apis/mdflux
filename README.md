@@ -1,5 +1,7 @@
 # mdflux
 
+> Transform your Markdown into high-fidelity HTML and PDF with zero friction.
+
 **mdflux** is a high-performance, minimalist CLI utility and Go library designed to convert Commonmark Markdown into production-ready HTML or PDF documents. Unlike heavy Node.js alternatives, this tool is compiled to a single binary with dependency on a webkit browser like Chrome or Edge for PDF generation.
 
 ## Features
@@ -68,33 +70,61 @@ cat input.md | mdflux
 
 ## Configuration
 
+Configuration is loaded from multiple sources with the following precedence (highest to lowest):
+
+1. Command-line flags
+2. Environment variables
+3. Config file
+4. Default values
+
 ### CLI Flags
 
 | Flag | Shorthand | Description | Default |
 | --- | --- | --- | --- |
 | `--config` | `-c` | Path to config file | (auto-detect) |
-| `--input` | `-i` | Input markdown file | stdin |
-| `--output` | `-o` | Output file path | stdout (HTML) |
-| `--format` | `-f` | Output format (`html`, `pdf`) | `html` |
-| `--theme` | `-t` | Color theme (`auto`, `light`, `dark`) | `auto` |
-| `--log-level` | `-l` | Log level (`debug`, `info`, `warn`, `error`) | `info` |
-| `--log-file` |  | Log file path | stderr |
-| `--help` | `-?` | Display help |  |
+| `--input.file` | `-i` | Input markdown file (use `-` for stdin) | stdin |
+| `--output.file` | `-o` | Output file (use `-` for stdout) | stdout |
+| `--output.format` | `-f` | Output format (`html`, `pdf`) | `html` |
+| `--html.theme` | `-t` | Color theme (`auto`, `light`, `dark`) | `auto` |
+| `--log_level` | `-l` | Log level (`debug`, `info`, `warn`, `error`) | `info` |
+| `--log_file` | | Log file path | stderr |
+| `--help` | `-?` | Display help | |
 
 ### Environment Variables
 
-All options can be set via environment variables with the `MDFLUX_` prefix:
+All options can be set via environment variables with the `MDFLUX_` prefix. Use underscores to separate nested keys:
 
 ```bash
-export MDFLUX_THEME=dark
-export MDFLUX_FORMAT=pdf
+export MDFLUX_INPUT_FILE=input.md
+export MDFLUX_OUTPUT_FILE=output.pdf
+export MDFLUX_OUTPUT_FORMAT=pdf
+export MDFLUX_HTML_THEME=dark
+export MDFLUX_LOG_LEVEL=debug
 ```
 
 ### Config File
 
-Create a `mdflux.cfg.toml` file:
+mdflux searches for `mdflux.cfg.toml` in these locations (in order):
+
+1. Current working directory (`./`)
+2. User config directory (`$HOME/.config/mdflux/`)
+3. System config directory (`/etc/mdflux/`)
+
+Or specify a custom path with `-c /path/to/config.toml`.
+
+Example `mdflux.cfg.toml`:
 
 ```toml
+log_level = "info"
+log_file = ""
+
+[input]
+file = ""
+
+[output]
+file = ""
+format = "html"
+
 [html]
 theme = "auto"
 unsafe = false
@@ -106,10 +136,14 @@ east_asian_line_breaks = "simple"
 page_size = "A4"
 landscape = false
 scale = 0.8
-margin_top = 0.4
-margin_bottom = 0.4
-margin_left = 0.4
-margin_right = 0.4
+margin_top = 0.5
+margin_bottom = 0.5
+margin_left = 0.5
+margin_right = 0.5
+
+[pdf.chrome]
+mode = "auto"
+path = ""
 
 [extensions]
 table = true
@@ -129,16 +163,44 @@ layout = "dagre"
 theme_id = 0
 ```
 
-### HTML Options
+---
+
+## HTML Options
 
 | Option | Default | Description |
 | --- | --- | --- |
+| `theme` | `auto` | Color theme. `auto` follows system preference, `light` or `dark` for fixed themes. |
 | `unsafe` | `false` | Allow raw HTML in markdown. When `false`, HTML tags are escaped. Enable for trusted content only. |
 | `hard_wraps` | `false` | Render single line breaks as `<br>`. When `false`, single newlines become spaces (standard Commonmark). |
 | `xhtml` | `false` | Output XHTML 1.0 Strict instead of HTML5. Produces self-closing tags (`<br />`) and XML declaration. |
 | `east_asian_line_breaks` | `simple` | Line break handling for CJK text. `simple` removes breaks between wide characters. `css3draft` follows CSS Text Level 3 rules. |
 
-### Extension Options
+---
+
+## PDF Options
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `page_size` | `A4` | Page size (`A4`, `Letter`, `Legal`). |
+| `landscape` | `false` | Use landscape orientation. |
+| `scale` | `0.8` | Scale factor for rendering (`0.1` - `2.0`). |
+| `margin_top` | `0.5` | Top margin in inches. |
+| `margin_bottom` | `0.5` | Bottom margin in inches. |
+| `margin_left` | `0.5` | Left margin in inches. |
+| `margin_right` | `0.5` | Right margin in inches. |
+
+### Chrome Configuration
+
+PDF rendering uses headless Chrome/Chromium. Configure under `[pdf.chrome]`:
+
+| Option | Default | Description |
+| --- | --- | --- |
+| `mode` | `auto` | Chrome detection mode. `auto` finds Chrome automatically, `manual` uses specified path. |
+| `path` | `""` | Path to Chrome/Chromium executable (only used when `mode = "manual"`). |
+
+---
+
+## Extension Options
 
 All extensions are enabled by default. Set to `false` to disable.
 
@@ -150,10 +212,10 @@ All extensions are enabled by default. Set to `false` to disable.
 | `task_list` | `true` | GitHub-style task lists with `- [x]` and `- [ ]` checkbox syntax. |
 | `definition_list` | `true` | Definition lists using term/definition pairs (PHP Markdown Extra syntax). |
 | `footnote` | `true` | Footnote references `[^1]` with auto-generated footnotes section. |
-| `typographer` | `true` | Smart typography: straight quotes → curly quotes, `--` → en-dash, `---` → em-dash, `...` → ellipsis. |
+| `typographer` | `true` | Smart typography: straight quotes to curly quotes, `--` to en-dash, `---` to em-dash, `...` to ellipsis. |
 | `cjk` | `true` | Optimized rendering for Chinese, Japanese, and Korean text. |
 | `katex` | `true` | LaTeX math rendering. Inline: `$E=mc^2$`. Display: `$$\int_0^\infty$$`. |
-| `mermaid` | `true` | Mermaid diagrams in fenced code blocks with `mermaid` language identifier. |
+| `mermaid` | `true` | Mermaid diagrams in fenced code blocks with `mermaid` language identifier. Server-side rendered to SVG. |
 
 ### D2 Diagram Options
 
@@ -164,17 +226,6 @@ D2 is a declarative diagramming language. Configure under `[extensions.d2]`:
 | `enabled` | `true` | Enable D2 diagram rendering in fenced code blocks with `d2` language identifier. |
 | `layout` | `dagre` | Layout engine. `dagre` for directed graphs, `elk` for more complex layouts. |
 | `theme_id` | `0` | D2 theme ID. `0` is default, other values apply different color schemes. |
-
----
-
-## PDF Options
-
-| Option | Values | Default |
-| --- | --- | --- |
-| `page_size` | `A4`, `Letter`, `Legal` | `A4` |
-| `landscape` | `true`, `false` | `false` |
-| `scale` | `0.1` - `2.0` | `0.8` |
-| `margin_*` | inches | `0.4` |
 
 ---
 

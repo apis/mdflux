@@ -121,3 +121,27 @@ fetch-mermaid:
     @New-Item -ItemType Directory -Force -Path (Split-Path {{mermaid_dest}}) | Out-Null
     @Invoke-WebRequest -Uri {{mermaid_url}} -OutFile {{mermaid_dest}}
     @echo "Downloaded to {{mermaid_dest}}"
+
+# KaTeX version to download
+katex_version := "0.16.21"
+katex_css_url := "https://cdn.jsdelivr.net/npm/katex@" + katex_version + "/dist/katex.min.css"
+katex_font_base := "https://cdn.jsdelivr.net/npm/katex@" + katex_version + "/dist/fonts"
+katex_dest := "web/assets/katex.min.css"
+
+# Fetch katex.min.css from CDN and fix font URLs to use CDN
+[unix]
+fetch-katex:
+    @echo "Fetching KaTeX CSS v{{katex_version}}..."
+    @mkdir -p $(dirname {{katex_dest}})
+    @curl -sL {{katex_css_url}} | sed 's|url(fonts/|url({{katex_font_base}}/|g' > {{katex_dest}}
+    @echo "Downloaded to {{katex_dest}} ($(wc -c < {{katex_dest}} | tr -d ' ') bytes)"
+
+[windows]
+fetch-katex:
+    @echo "Fetching KaTeX CSS v{{katex_version}}..."
+    @New-Item -ItemType Directory -Force -Path (Split-Path {{katex_dest}}) | Out-Null
+    @$css = (Invoke-WebRequest -Uri {{katex_css_url}}).Content; $css -replace 'url\(fonts/', 'url({{katex_font_base}}/' | Set-Content {{katex_dest}}
+    @echo "Downloaded to {{katex_dest}}"
+
+# Fetch all external assets
+fetch-assets: fetch-mermaid fetch-katex

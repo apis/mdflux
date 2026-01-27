@@ -5,6 +5,8 @@ import (
 	"io/fs"
 	"strings"
 	"text/template"
+
+	"mdflux/web"
 )
 
 const (
@@ -35,9 +37,11 @@ func ParseTemplates(templateFS fs.FS) (*Templates, error) {
 		return nil, fmt.Errorf("failed to parse templates: %w", err)
 	}
 
+	combinedStyles := web.KaTeXCSS + "\n" + string(styles)
+
 	return &Templates{
 		templates: tmpl,
-		styles:    string(styles),
+		styles:    combinedStyles,
 	}, nil
 }
 

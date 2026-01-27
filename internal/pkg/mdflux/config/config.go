@@ -15,12 +15,12 @@ const (
 
 	helpKey     = "help"
 	configKey   = "config"
-	inputKey    = "input.file"
-	outputKey   = "output.file"
-	formatKey   = "output.format"
+	inputKey    = "input"
+	outputKey   = "output"
+	formatKey   = "format"
 	logLevelKey = "log_level"
 	logFileKey  = "log_file"
-	themeKey    = "html.theme"
+	themeKey    = "theme"
 
 	defaultLogLevel      = "info"
 	defaultTheme         = "auto"
@@ -34,22 +34,15 @@ const (
 )
 
 type Config struct {
+	Input      string           `mapstructure:"input"`
+	Output     string           `mapstructure:"output"`
+	Format     string           `mapstructure:"format"`
+	Theme      string           `mapstructure:"theme"`
 	LogLevel   string           `mapstructure:"log_level"`
 	LogFile    string           `mapstructure:"log_file"`
-	Input      InputConfig      `mapstructure:"input"`
-	Output     OutputConfig     `mapstructure:"output"`
 	HTML       HTMLConfig       `mapstructure:"html"`
 	PDF        PDFConfig        `mapstructure:"pdf"`
 	Extensions ExtensionsConfig `mapstructure:"extensions"`
-}
-
-type InputConfig struct {
-	File string `mapstructure:"file"`
-}
-
-type OutputConfig struct {
-	File   string `mapstructure:"file"`
-	Format string `mapstructure:"format"`
 }
 
 type PDFConfig struct {
@@ -72,7 +65,6 @@ type HTMLConfig struct {
 	Unsafe              bool   `mapstructure:"unsafe"`
 	HardWraps           bool   `mapstructure:"hard_wraps"`
 	XHTML               bool   `mapstructure:"xhtml"`
-	Theme               string `mapstructure:"theme"`
 	EastAsianLineBreaks string `mapstructure:"east_asian_line_breaks"`
 }
 

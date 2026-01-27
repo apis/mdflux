@@ -82,23 +82,23 @@ Configuration is loaded from multiple sources with the following precedence (hig
 | Flag | Shorthand | Description | Default |
 | --- | --- | --- | --- |
 | `--config` | `-c` | Path to config file | (auto-detect) |
-| `--input.file` | `-i` | Input markdown file (use `-` for stdin) | stdin |
-| `--output.file` | `-o` | Output file (use `-` for stdout) | stdout |
-| `--output.format` | `-f` | Output format (`html`, `pdf`) | `html` |
-| `--html.theme` | `-t` | Color theme (`auto`, `light`, `dark`) | `auto` |
+| `--input` | `-i` | Input markdown file (use `-` for stdin) | stdin |
+| `--output` | `-o` | Output file (use `-` for stdout) | stdout |
+| `--format` | `-f` | Output format (`html`, `pdf`) | `html` |
+| `--theme` | `-t` | Color theme (`auto`, `light`, `dark`) | `auto` |
 | `--log_level` | `-l` | Log level (`debug`, `info`, `warn`, `error`) | `info` |
 | `--log_file` | | Log file path | stderr |
 | `--help` | `-?` | Display help | |
 
 ### Environment Variables
 
-All options can be set via environment variables with the `MDFLUX_` prefix. Use underscores to separate nested keys:
+All options can be set via environment variables with the `MDFLUX_` prefix:
 
 ```bash
-export MDFLUX_INPUT_FILE=input.md
-export MDFLUX_OUTPUT_FILE=output.pdf
-export MDFLUX_OUTPUT_FORMAT=pdf
-export MDFLUX_HTML_THEME=dark
+export MDFLUX_INPUT=input.md
+export MDFLUX_OUTPUT=output.pdf
+export MDFLUX_FORMAT=pdf
+export MDFLUX_THEME=dark
 export MDFLUX_LOG_LEVEL=debug
 ```
 
@@ -115,18 +115,14 @@ Or specify a custom path with `-c /path/to/config.toml`.
 Example `mdflux.cfg.toml`:
 
 ```toml
+input = ""
+output = ""
+format = "html"
+theme = "auto"
 log_level = "info"
 log_file = ""
 
-[input]
-file = ""
-
-[output]
-file = ""
-format = "html"
-
 [html]
-theme = "auto"
 unsafe = false
 hard_wraps = false
 xhtml = false

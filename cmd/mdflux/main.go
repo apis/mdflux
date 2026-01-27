@@ -66,11 +66,11 @@ func setupLogging(cfg *config.Config) error {
 func run(cfg *config.Config, templates *converter.Templates) error {
 	var input io.Reader
 
-	if cfg.Input.File == "" || cfg.Input.File == "-" {
+	if cfg.Input == "" || cfg.Input == "-" {
 		input = os.Stdin
 		log.Debug().Msg("Reading from stdin")
 	} else {
-		f, err := os.Open(cfg.Input.File)
+		f, err := os.Open(cfg.Input)
 		if err != nil {
 			return fmt.Errorf("failed to open input file: %w", err)
 		}
@@ -80,10 +80,9 @@ func run(cfg *config.Config, templates *converter.Templates) error {
 			}
 		}()
 		input = f
-		log.Debug().Str("file", cfg.Input.File).Msg("Reading from file")
+		log.Debug().Str("file", cfg.Input).Msg("Reading from file")
 	}
 
-	// Create mermaid renderer if mermaid extension is enabled
 	var mermaidRenderer *mermaid.Renderer
 	if cfg.Extensions.Mermaid {
 		chromePath := ""
@@ -99,7 +98,7 @@ func run(cfg *config.Config, templates *converter.Templates) error {
 		Unsafe:              cfg.HTML.Unsafe,
 		HardWraps:           cfg.HTML.HardWraps,
 		XHTML:               cfg.HTML.XHTML,
-		Theme:               cfg.HTML.Theme,
+		Theme:               cfg.Theme,
 		EastAsianLineBreaks: cfg.HTML.EastAsianLineBreaks,
 		MermaidRenderer:     mermaidRenderer,
 		Extensions: converter.ExtensionOptions{
@@ -121,7 +120,7 @@ func run(cfg *config.Config, templates *converter.Templates) error {
 		},
 	}, templates)
 
-	format := cfg.Output.Format
+	format := cfg.Format
 	if format == "" {
 		format = "html"
 	}
@@ -138,11 +137,11 @@ func run(cfg *config.Config, templates *converter.Templates) error {
 func runHTMLConversion(cfg *config.Config, conv *converter.Converter, input io.Reader) error {
 	var output io.Writer
 
-	if cfg.Output.File == "" || cfg.Output.File == "-" {
+	if cfg.Output == "" || cfg.Output == "-" {
 		output = os.Stdout
 		log.Debug().Msg("Writing to stdout")
 	} else {
-		f, err := os.Create(cfg.Output.File)
+		f, err := os.Create(cfg.Output)
 		if err != nil {
 			return fmt.Errorf("failed to create output file: %w", err)
 		}
@@ -152,7 +151,7 @@ func runHTMLConversion(cfg *config.Config, conv *converter.Converter, input io.R
 			}
 		}()
 		output = f
-		log.Debug().Str("file", cfg.Output.File).Msg("Writing to file")
+		log.Debug().Str("file", cfg.Output).Msg("Writing to file")
 	}
 
 	if err := conv.ConvertReader(input, output); err != nil {
@@ -164,7 +163,7 @@ func runHTMLConversion(cfg *config.Config, conv *converter.Converter, input io.R
 }
 
 func runPDFConversion(cfg *config.Config, conv *converter.Converter, input io.Reader) error {
-	if cfg.Output.File == "" || cfg.Output.File == "-" {
+	if cfg.Output == "" || cfg.Output == "-" {
 		return fmt.Errorf("PDF output requires a file path, cannot write to stdout")
 	}
 
@@ -196,7 +195,7 @@ func runPDFConversion(cfg *config.Config, conv *converter.Converter, input io.Re
 		return fmt.Errorf("failed to get absolute path: %w", err)
 	}
 
-	absPDFPath, err := filepath.Abs(cfg.Output.File)
+	absPDFPath, err := filepath.Abs(cfg.Output)
 	if err != nil {
 		return fmt.Errorf("failed to get absolute path for output: %w", err)
 	}

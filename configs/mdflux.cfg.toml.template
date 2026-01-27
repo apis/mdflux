@@ -1,23 +1,24 @@
+# mdflux configuration file
+
+# Path to input markdown file (use "-" for stdin)
+input = ""
+
+# Path to output file (use "-" for stdout)
+output = ""
+
+# Output format: "html" or "pdf"
+format = "html"
+
+# Color theme: "auto", "light", "dark"
+theme = "light"
+
 # Log level: "debug", "info", "warn", "error"
 log_level = "info"
 
 # Path to log file (empty for stderr)
 log_file = ""
 
-[input]
-# Path to input markdown file (use "-" for stdin)
-file = ""
-
-[output]
-# Path to output HTML file (use "-" for stdout)
-file = ""
-# Output format: "html" or "pdf"
-format = "html"
-
 [html]
-# Color theme: "auto", "light", "dark"
-theme = "light"
-
 # Allow raw HTML in markdown
 unsafe = false
 

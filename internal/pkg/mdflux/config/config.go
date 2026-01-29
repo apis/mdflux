@@ -102,6 +102,15 @@ func LoadAndParse() (*Config, error) {
 	viper.SetDefault("pdf.margin_right", defaultPDFMargin)
 	viper.SetDefault("pdf.chrome.mode", defaultPDFChromeMode)
 
+	viper.SetDefault("extensions.table", true)
+	viper.SetDefault("extensions.strikethrough", true)
+	viper.SetDefault("extensions.linkify", true)
+	viper.SetDefault("extensions.task_list", true)
+	viper.SetDefault("extensions.typographer", true)
+	viper.SetDefault("extensions.katex", true)
+	viper.SetDefault("extensions.mermaid", true)
+	viper.SetDefault("extensions.d2.enabled", true)
+
 	flagSet := pflag.NewFlagSet("mdflux", pflag.ContinueOnError)
 	flagSet.Usage = func() {}
 

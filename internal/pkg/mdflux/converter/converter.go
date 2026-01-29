@@ -10,6 +10,7 @@ import (
 	"github.com/FurqanSoftware/goldmark-katex"
 	"github.com/yuin/goldmark"
 	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/parser"
 	"github.com/yuin/goldmark/renderer"
 	"github.com/yuin/goldmark/renderer/html"
 	"github.com/yuin/goldmark/util"
@@ -78,6 +79,10 @@ func New(opts Options, templates *Templates) *Converter {
 	htmlRenderer := html.NewRenderer(htmlOpts...)
 
 	var gmOpts []goldmark.Option
+
+	gmOpts = append(gmOpts, goldmark.WithParserOptions(
+		parser.WithAutoHeadingID(),
+	))
 
 	gmOpts = append(gmOpts, goldmark.WithRenderer(
 		renderer.NewRenderer(

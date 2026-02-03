@@ -60,7 +60,7 @@ fmt:
     @echo "Format complete"
 
 # Mermaid.js version to download
-mermaid_version := "11.4.0"
+mermaid_version := "11.12.2"
 mermaid_url := "https://cdn.jsdelivr.net/npm/mermaid@" + mermaid_version + "/dist/mermaid.min.js"
 mermaid_dest := "web/assets/mermaid.min.js"
 
@@ -79,7 +79,8 @@ fetch-mermaid:
     @Invoke-WebRequest -Uri {{mermaid_url}} -OutFile {{mermaid_dest}}
     @echo "Downloaded to {{mermaid_dest}}"
 
-# KaTeX destination
+# KaTeX version to download
+katex_version := "0.16.28"
 katex_dest := "web/assets/katex.min.css"
 
 # Fetch KaTeX CSS with embedded fonts (fully offline)
@@ -87,7 +88,7 @@ fetch-katex:
     @echo "Building katex-embed tool..."
     @go build -o bin/katex-embed{{exe_suffix}} ./tools/katex-embed
     @mkdir -p $(dirname {{katex_dest}})
-    @./bin/katex-embed{{exe_suffix}} {{katex_dest}}
+    @./bin/katex-embed{{exe_suffix}} {{katex_dest}} {{katex_version}}
 
 # Fetch all external assets
 fetch-assets: fetch-mermaid fetch-katex

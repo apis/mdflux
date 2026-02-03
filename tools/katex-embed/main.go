@@ -10,18 +10,16 @@ import (
 	"strings"
 )
 
-const (
-	katexVersion = "0.16.21"
-	katexCSSURL  = "https://cdn.jsdelivr.net/npm/katex@" + katexVersion + "/dist/katex.min.css"
-	katexFontURL = "https://cdn.jsdelivr.net/npm/katex@" + katexVersion + "/dist/fonts/"
-)
-
 func main() {
-	if len(os.Args) < 2 {
-		fmt.Fprintf(os.Stderr, "Usage: %s <output-file>\n", os.Args[0])
+	if len(os.Args) < 3 {
+		fmt.Fprintf(os.Stderr, "Usage: %s <output-file> <version>\n", os.Args[0])
 		os.Exit(1)
 	}
 	outputPath := os.Args[1]
+	katexVersion := os.Args[2]
+
+	katexCSSURL := "https://cdn.jsdelivr.net/npm/katex@" + katexVersion + "/dist/katex.min.css"
+	katexFontURL := "https://cdn.jsdelivr.net/npm/katex@" + katexVersion + "/dist/fonts/"
 
 	fmt.Fprintf(os.Stderr, "Fetching KaTeX CSS v%s...\n", katexVersion)
 	css, err := fetchURL(katexCSSURL)

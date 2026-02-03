@@ -30,8 +30,5 @@ Thumbs.db
 /bin/
 *.log
 
-# Config files (keep templates)
-mdflux.cfg.toml
-
 # Downloaded assets (fetched via just fetch-mermaid)
 web/assets/

@@ -4,35 +4,13 @@ set windows-shell := ["powershell.exe", "-NoLogo", "-Command"]
 # Platform-specific executable suffix
 exe_suffix := if os() == "windows" { ".exe" } else { "" }
 
-# List available recipes
-default:
-    @just --list
+default: build
 
 # Build the mdflux binary
 build:
     @echo "Building mdflux..."
     @go build -o bin/mdflux{{exe_suffix}} ./cmd/mdflux
     @echo "Build complete: bin/mdflux{{exe_suffix}}"
-
-# Build and run with sample input
-run: build
-    @echo "Running mdflux..."
-    @echo "# Sample\n\nThis is **bold** and *italic*." | ./bin/mdflux{{exe_suffix}} -i -
-
-# Run with debug logging
-run-debug: build
-    @echo "Running mdflux with debug logging..."
-    @echo "# Sample\n\nThis is **bold**." | ./bin/mdflux{{exe_suffix}} -i - -l debug
-
-# Convert a file
-convert input output="": build
-    @echo "Converting {{input}}..."
-    @./bin/mdflux{{exe_suffix}} -i {{input}} {{ if output != "" { "-o " + output } else { "" } }}
-
-# Convert with full HTML document
-convert-full input output="": build
-    @echo "Converting {{input}} to full HTML document..."
-    @./bin/mdflux{{exe_suffix}} -i {{input}} --html.full_document {{ if output != "" { "-o " + output } else { "" } }}
 
 # Clean build artifacts
 [unix]
@@ -81,27 +59,6 @@ fmt:
     @go fmt ./...
     @echo "Format complete"
 
-# Run linter
-[unix]
-lint:
-    @echo "Running linter..."
-    @golangci-lint run || echo "Note: Install golangci-lint for linting"
-
-[windows]
-lint:
-    @echo "Running linter..."
-    @try { golangci-lint run } catch { echo "Note: Install golangci-lint for linting" }
-
-# Show help
-help: build
-    @./bin/mdflux{{exe_suffix}} -?
-
-# Install binary to GOPATH/bin
-install:
-    @echo "Installing mdflux..."
-    @go install ./cmd/mdflux
-    @echo "Installed to GOPATH/bin"
-
 # Mermaid.js version to download
 mermaid_version := "11.4.0"
 mermaid_url := "https://cdn.jsdelivr.net/npm/mermaid@" + mermaid_version + "/dist/mermaid.min.js"
@@ -134,3 +91,6 @@ fetch-katex:
 
 # Fetch all external assets
 fetch-assets: fetch-mermaid fetch-katex
+
+# Full rebuild: clean, fetch all assets, and build
+rebuild: clean fetch-assets build

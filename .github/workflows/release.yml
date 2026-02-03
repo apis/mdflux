@@ -30,14 +30,17 @@ jobs:
           echo "Building for linux/amd64..."
           go build -trimpath -ldflags="-s -w" -o bin/mdflux ./cmd/mdflux
 
-      - name: Create zip
-        run: zip -j bin/mdflux-linux-amd64.zip bin/mdflux
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdflux-linux-amd64
-          path: bin/mdflux-linux-amd64.zip
+          path: |
+            bin/mdflux
+            LICENSE
+
+      - name: Create release zip
+        if: github.event_name == 'release'
+        run: zip -j bin/mdflux-linux-amd64.zip bin/mdflux LICENSE
 
       - name: Upload to release
         if: github.event_name == 'release'
@@ -69,14 +72,17 @@ jobs:
           echo "Building for windows/amd64..."
           go build -trimpath -ldflags="-s -w" -o bin/mdflux.exe ./cmd/mdflux
 
-      - name: Create zip
-        run: Compress-Archive -Path bin/mdflux.exe -DestinationPath bin/mdflux-windows-amd64.zip
-
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdflux-windows-amd64
-          path: bin/mdflux-windows-amd64.zip
+          path: |
+            bin/mdflux.exe
+            LICENSE
+
+      - name: Create release zip
+        if: github.event_name == 'release'
+        run: Compress-Archive -Path bin/mdflux.exe, LICENSE -DestinationPath bin/mdflux-windows-amd64.zip
 
       - name: Upload to release
         if: github.event_name == 'release'

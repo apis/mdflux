@@ -12,6 +12,12 @@ build:
     @go build -o bin/mdflux{{exe_suffix}} ./cmd/mdflux
     @echo "Build complete: bin/mdflux{{exe_suffix}}"
 
+# Build production binary (stripped, no debug info, no paths)
+release: clean fetch-assets
+    @echo "Building production mdflux..."
+    @go build -trimpath -ldflags="-s -w" -o bin/mdflux{{exe_suffix}} ./cmd/mdflux
+    @echo "Production build complete: bin/mdflux{{exe_suffix}}"
+
 # Clean build artifacts
 [unix]
 clean:

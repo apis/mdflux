@@ -19,6 +19,8 @@ import (
 )
 
 func main() {
+	fmt.Fprintf(os.Stderr, "mdflux %s\n", FullVersion())
+
 	zerolog.TimeFieldFormat = time.RFC3339
 	log.Logger = log.Output(zerolog.ConsoleWriter{Out: os.Stderr, TimeFormat: time.RFC3339})
 

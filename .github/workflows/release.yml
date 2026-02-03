@@ -5,6 +5,9 @@ on:
     types: [created]
   workflow_dispatch:
 
+env:
+  VERSION_BASE: "1.0"
+
 jobs:
   build-linux:
     runs-on: ubuntu-latest
@@ -28,7 +31,7 @@ jobs:
       - name: Build production binary
         run: |
           echo "Building for linux/amd64..."
-          go build -trimpath -ldflags="-s -w" -o dist/mdflux ./cmd/mdflux
+          go build -trimpath -ldflags="-s -w -X main.Version=${{ env.VERSION_BASE }}.${{ github.run_number }}" -o dist/mdflux ./cmd/mdflux
           cp LICENSE dist/
 
       - name: Upload artifact
@@ -71,7 +74,7 @@ jobs:
         run: |
           echo "Building for windows/amd64..."
           New-Item -ItemType Directory -Force -Path dist | Out-Null
-          go build -trimpath -ldflags="-s -w" -o dist/mdflux.exe ./cmd/mdflux
+          go build -trimpath -ldflags="-s -w -X main.Version=${{ env.VERSION_BASE }}.${{ github.run_number }}" -o dist/mdflux.exe ./cmd/mdflux
           Copy-Item LICENSE dist/
 
       - name: Upload artifact

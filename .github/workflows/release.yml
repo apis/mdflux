@@ -28,25 +28,25 @@ jobs:
       - name: Build production binary
         run: |
           echo "Building for linux/amd64..."
-          go build -trimpath -ldflags="-s -w" -o bin/mdflux ./cmd/mdflux
+          go build -trimpath -ldflags="-s -w" -o dist/mdflux ./cmd/mdflux
+          cp LICENSE dist/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdflux-linux-amd64
-          path: |
-            bin/mdflux
-            LICENSE
+          path: dist/*
 
       - name: Create release zip
         if: github.event_name == 'release'
-        run: zip -j bin/mdflux-linux-amd64.zip bin/mdflux LICENSE
+        working-directory: dist
+        run: zip mdflux-linux-amd64.zip mdflux LICENSE
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/mdflux-linux-amd64.zip
+          files: dist/mdflux-linux-amd64.zip
 
   build-windows:
     runs-on: windows-latest
@@ -70,22 +70,22 @@ jobs:
       - name: Build production binary
         run: |
           echo "Building for windows/amd64..."
-          go build -trimpath -ldflags="-s -w" -o bin/mdflux.exe ./cmd/mdflux
+          New-Item -ItemType Directory -Force -Path dist | Out-Null
+          go build -trimpath -ldflags="-s -w" -o dist/mdflux.exe ./cmd/mdflux
+          Copy-Item LICENSE dist/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdflux-windows-amd64
-          path: |
-            bin/mdflux.exe
-            LICENSE
+          path: dist/*
 
       - name: Create release zip
         if: github.event_name == 'release'
-        run: Compress-Archive -Path bin/mdflux.exe, LICENSE -DestinationPath bin/mdflux-windows-amd64.zip
+        run: Compress-Archive -Path dist/mdflux.exe, dist/LICENSE -DestinationPath dist/mdflux-windows-amd64.zip
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/mdflux-windows-amd64.zip
+          files: dist/mdflux-windows-amd64.zip

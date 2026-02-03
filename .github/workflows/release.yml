@@ -28,19 +28,22 @@ jobs:
       - name: Build production binary
         run: |
           echo "Building for linux/amd64..."
-          go build -trimpath -ldflags="-s -w" -o bin/mdflux-linux-amd64 ./cmd/mdflux
+          go build -trimpath -ldflags="-s -w" -o bin/mdflux ./cmd/mdflux
+
+      - name: Create zip
+        run: zip -j bin/mdflux-linux-amd64.zip bin/mdflux
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdflux-linux-amd64
-          path: bin/mdflux-linux-amd64
+          path: bin/mdflux-linux-amd64.zip
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/mdflux-linux-amd64
+          files: bin/mdflux-linux-amd64.zip
 
   build-windows:
     runs-on: windows-latest
@@ -64,16 +67,19 @@ jobs:
       - name: Build production binary
         run: |
           echo "Building for windows/amd64..."
-          go build -trimpath -ldflags="-s -w" -o bin/mdflux-windows-amd64.exe ./cmd/mdflux
+          go build -trimpath -ldflags="-s -w" -o bin/mdflux.exe ./cmd/mdflux
+
+      - name: Create zip
+        run: Compress-Archive -Path bin/mdflux.exe -DestinationPath bin/mdflux-windows-amd64.zip
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mdflux-windows-amd64
-          path: bin/mdflux-windows-amd64.exe
+          path: bin/mdflux-windows-amd64.zip
 
       - name: Upload to release
         if: github.event_name == 'release'
         uses: softprops/action-gh-release@v2
         with:
-          files: bin/mdflux-windows-amd64.exe
+          files: bin/mdflux-windows-amd64.zip

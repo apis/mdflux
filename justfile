@@ -90,11 +90,19 @@ katex_version := "0.16.28"
 katex_dest := "web/assets/katex.min.css"
 
 # Fetch KaTeX CSS with embedded fonts (fully offline)
+[unix]
 fetch-katex:
     @echo "Building katex-embed tool..."
     @go build -o bin/katex-embed{{exe_suffix}} ./tools/katex-embed
     @mkdir -p $(dirname {{katex_dest}})
     @./bin/katex-embed{{exe_suffix}} {{katex_dest}} {{katex_version}}
+
+[windows]
+fetch-katex:
+    @echo "Building katex-embed tool..."
+    @go build -o bin/katex-embed{{exe_suffix}} ./tools/katex-embed
+    @New-Item -ItemType Directory -Force -Path (Split-Path {{katex_dest}}) | Out-Null
+    @.\bin\katex-embed{{exe_suffix}} {{katex_dest}} {{katex_version}}
 
 # Fetch all external assets
 fetch-assets: fetch-mermaid fetch-katex

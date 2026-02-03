@@ -95,3 +95,11 @@ fetch-assets: fetch-mermaid fetch-katex
 
 # Full rebuild: clean, fetch all assets, and build
 rebuild: clean fetch-assets build
+
+# Update demo: convert demo.md to HTML and PDF
+demo: build
+    @echo "Converting demo.md to HTML..."
+    @./bin/mdflux{{exe_suffix}} -i docs/demo.md -o docs/demo.html -f html
+    @echo "Converting demo.md to PDF..."
+    @./bin/mdflux{{exe_suffix}} -i docs/demo.md -o docs/demo.pdf -f pdf
+    @echo "Demo updated: docs/demo.html, docs/demo.pdf"

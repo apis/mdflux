@@ -66,7 +66,7 @@ fmt:
     @echo "Format complete"
 
 # Mermaid.js version to download
-mermaid_version := "11.12.2"
+mermaid_version := "11.12.3"
 mermaid_url := "https://cdn.jsdelivr.net/npm/mermaid@" + mermaid_version + "/dist/mermaid.min.js"
 mermaid_dest := "web/assets/mermaid.min.js"
 
@@ -86,7 +86,7 @@ fetch-mermaid:
     @echo "Downloaded to {{mermaid_dest}}"
 
 # KaTeX version to download
-katex_version := "0.16.28"
+katex_version := "0.16.33"
 katex_dest := "web/assets/katex.min.css"
 
 # Fetch KaTeX CSS with embedded fonts (fully offline)

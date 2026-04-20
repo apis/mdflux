@@ -159,9 +159,7 @@ func LoadAndParse() (*Config, error) {
 
 	viper.SetEnvPrefix(envPrefix)
 	viper.SetEnvKeyReplacer(strings.NewReplacer(".", "_"))
-	for _, key := range []string{inputKey, outputKey, formatKey, logLevelKey, logFileKey, themeKey} {
-		_ = viper.BindEnv(key)
-	}
+	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
 		var configFileNotFoundError viper.ConfigFileNotFoundError

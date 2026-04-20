@@ -237,6 +237,33 @@ D2 is a declarative diagramming language. Configure under `[extensions.d2]`:
 
 ---
 
+## Known Issues
+
+### Dollar Signs Rendered as Math with KaTeX Enabled
+
+KaTeX treats `$...$` as inline math delimiters. If your document contains dollar signs for currency (e.g. `$63.38 USD converted to $88.59 CAD`), the text between the two `$` signs will be parsed as a math expression, producing garbled output like `63.38U SDconvertedto88.59`.
+
+**Option 1 — Escape the dollar signs in your markdown:**
+
+```markdown
+\$63.38 USD converted to \$88.59 CAD
+```
+
+**Option 2 — Disable KaTeX via environment variable (per-run):**
+
+```bash
+MDFLUX_EXTENSIONS_KATEX=false mdflux -i input.md -o output.pdf -f pdf
+```
+
+**Option 3 — Disable KaTeX in your config file:**
+
+```toml
+[extensions]
+katex = false
+```
+
+---
+
 ## License
 
 Distributed under the MIT License. See `LICENSE` for more information.
